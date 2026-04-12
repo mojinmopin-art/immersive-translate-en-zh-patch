@@ -1,28 +1,41 @@
-name: SEO-Auto-Refresh
+name: SEO-Auto-Refresh-And-Boost
 
 on:
   schedule:
-    - cron: '30 2 * * *' # 每天北京时间上午 10:30 自动执行
-  workflow_dispatch:      # 允许手动点击运行测试
+    - cron: '*/30 * * * *' # 每 30 分钟执行一次，既更新代码又刷访问
+  workflow_dispatch:      # 允许手动点击测试
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write    # 必须有这个权限，脚本才能修改文件并更新时间
+      contents: write
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: 刷新更新时间
+      - name: 1. 模拟真实用户访问 (两跳逻辑)
         run: |
-          # 创建或更新一个名为 update_log.txt 的文件
+          # 第一跳：访问 GitHub 落地页，带着 GitHub 的来源信息
+          curl -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" \
+               -e "https://github.com{{ github.repository }}" \
+               https://chenni-translate.com
+          
+          sleep 5 # 模拟停留
+
+          # 第二跳：从落地页跳回主站，带着 patch 域名的来源信息
+          curl -A "Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1" \
+               -e "https://chenni-translate.com/" \
+               https://chenni-translate.com
+
+      - name: 2. 刷新仓库更新时间 (提升排名)
+        run: |
           echo "Last SEO Refresh: $(date)" > update_log.txt
           
-      - name: 提交更新到仓库
+      - name: 3. 提交更新到仓库
         run: |
-          git config --local user.email "github-actions[bot]@://github.com"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add update_log.txt
-          git commit -m "docs: performance optimization and bug fixes"
+          git commit -m "docs: maintenance and performance optimization"
           git push
