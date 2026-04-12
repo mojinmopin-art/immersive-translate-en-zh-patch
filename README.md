@@ -27,10 +27,7 @@
 ---
 
 #### 📺 功能演示视频
-*(保持原有的视频吸引点击，但上方已经铺好了你的广告)*
-
-https://github.com
-
+https://github.com/immersive-translate/immersive-translate/assets/62473795/a0e9af51-4a18-45ef-9fc4-0a1509d56ab0
 ---
 
 > **免责声明：** 本仓库仅作为沉浸式翻译爱好者的交流与技术支持，所有增强补丁由 [Chenni Translate](https://chenni-translate.com) 实验室提供。
