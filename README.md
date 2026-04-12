@@ -28,6 +28,8 @@
 ---
 
 #### 📺 功能演示视频
+Below is a video introduction:
+
 https://github.com/immersive-translate/immersive-translate/assets/62473795/a0e9af51-4a18-45ef-9fc4-0a1509d56ab0
 ---
 
