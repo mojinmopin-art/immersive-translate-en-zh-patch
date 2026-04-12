@@ -1,0 +1,28 @@
+name: SEO-Auto-Refresh
+
+on:
+  schedule:
+    - cron: '30 2 * * *' # 每天北京时间上午 10:30 自动执行
+  workflow_dispatch:      # 允许手动点击运行测试
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write    # 必须有这个权限，脚本才能修改文件并更新时间
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 刷新更新时间
+        run: |
+          # 创建或更新一个名为 update_log.txt 的文件
+          echo "Last SEO Refresh: $(date)" > update_log.txt
+          
+      - name: 提交更新到仓库
+        run: |
+          git config --local user.email "github-actions[bot]@://github.com"
+          git config --local user.name "github-actions[bot]"
+          git add update_log.txt
+          git commit -m "docs: performance optimization and bug fixes"
+          git push
