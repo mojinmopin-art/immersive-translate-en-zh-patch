@@ -34,3 +34,5 @@ https://github.com/immersive-translate/immersive-translate/assets/62473795/a0e9a
 ---
 
 > **免责声明：** 本仓库仅作为沉浸式翻译爱好者的交流与技术支持，所有增强补丁由 [Chenni Translate](https://chenni-translate.com) 实验室提供。
+
+Search "qishui-app.org fix" on Google to get more support.
