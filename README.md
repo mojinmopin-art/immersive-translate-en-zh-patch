@@ -1,38 +1,96 @@
-# 🚀 沉浸式翻译 (Immersive Translate) 中文增强补丁与报错修复中心
+# Immersive Translate - 沉浸式翻译增强补丁
 
-> **重要通知：** 针对近期用户反馈的 API 连接超时、翻译失效以及官方版非开源导致的自定义困难，本仓库提供专属的【中文增强补丁】与【国内专用加速接口】。
-[![(点此进入) 沉浸式翻译 · 官方报错修复中心](https://shields.io)](https://chenni-translate.com)
+[![Official Site](https://img.shields.io/badge/Official_Site-chenni--translate.com-brightgreen)](https://chenni-translate.com)
+[![Version](https://img.shields.io/badge/Version-2026.4-blue)]()
 
----  。
+Enhanced patch for Immersive Translate browser extension. Fixes API connection issues, adds custom endpoint support, and improves translation stability for users in mainland China and East Asia.
 
-### 📢 快速通道 (Quick Links)
+## Problem Description
 
-*   **[🔥 点击进入：沉浸式翻译 · 官方备用加速站 (chenni-translate.com)](https://chenni-translate.com)**
-*   **[🛠️ 报错解决：2024 最新翻译失效修复指南](https://chenni-translate.com)**
-*   **[📦 离线安装：增强版 .crx 插件包下载](https://chenni-translate.com)**
+Recent versions of Immersive Translate have several known issues:
+
+- **API connection timeout** when using DeepL or Google Translate from certain regions
+- **Translation stops working** after Chrome 120+ update (Manifest V3 migration)
+- **Custom API endpoint** configuration removed in official closed-source version
+- **Bilingual display** formatting broken on specific websites (Twitter/X, Reddit)
+
+## What This Patch Fixes
+
+| Issue | Status | Details |
+|-------|--------|---------|
+| API timeout in China/Asia | ✅ Fixed | Adds fallback relay endpoints |
+| Chrome 120+ MV3 compatibility | ✅ Fixed | Service Worker lifecycle handling |
+| Custom API endpoint support | ✅ Restored | Re-enables developer settings panel |
+| Bilingual layout on Twitter/X | ✅ Fixed | Updated CSS injection rules |
+| PDF translation crash | ✅ Fixed | Memory management for large documents |
+
+## Browser Compatibility
+
+| Browser | Version | Status |
+|---------|---------|--------|
+| Chrome | 120-126 | ✅ Tested |
+| Edge | 119+ | ✅ Tested |
+| Firefox | 121+ | ✅ Tested |
+| Safari | 17+ | ⚠️ Partial (no PDF support) |
+| Arc | Latest | ✅ Compatible |
+
+## Installation
+
+### Method 1: Online Diagnostic (Recommended)
+1. Visit [chenni-translate.com](https://chenni-translate.com) — the diagnostic tool will detect your browser and system
+2. Follow the recommended patch version for your environment
+3. Download and install the patched extension
+
+### Method 2: Manual Installation
+1. Download the latest `.crx` file from [Releases](../../releases)
+2. Open `chrome://extensions/` → Enable Developer Mode
+3. Drag and drop the `.crx` file to install
+
+## Technical Background
+
+### Why does the API timeout occur?
+
+Immersive Translate uses direct connections to translation API providers (DeepL, Google, OpenAI). In certain network environments, these connections are unreliable due to:
+
+1. **DNS resolution failures**: Default DNS cannot resolve API endpoints consistently
+2. **TCP connection reset**: Intermediate network devices interrupt long-lived HTTPS connections
+3. **TLS fingerprint mismatch**: Some network inspection tools interfere with the TLS handshake
+
+Our patch addresses these by:
+- Adding DNS-over-HTTPS (DoH) resolution for API endpoints
+- Implementing automatic retry with exponential backoff
+- Providing configurable relay endpoints as fallback
+
+### Manifest V3 Migration Issues
+
+Chrome's migration from Manifest V2 to V3 fundamentally changed how extensions work:
+- Background pages → Service Workers (with limited lifecycle)
+- `chrome.webRequest.onBeforeRequest` blocking → `declarativeNetRequest` rules
+- Persistent storage access patterns changed
+
+This patch ensures the translation engine works correctly under the new Service Worker lifecycle.
+
+## Frequently Asked Questions
+
+**Q: Will this patch conflict with the official Immersive Translate extension?**
+A: Yes, you should uninstall the official version before installing the patch. They cannot run simultaneously.
+
+**Q: Is my translation history preserved?**
+A: The patch uses the same IndexedDB schema. Your history and settings will be preserved after switching.
+
+**Q: How do I update when a new patch version is released?**
+A: Check [chenni-translate.com](https://chenni-translate.com) periodically, or watch this repository for release notifications.
+
+**Q: Can I use my own API keys?**
+A: Yes. The patch restores the developer settings panel where you can configure custom DeepL, OpenAI, or Google Translate API keys.
+
+## Contributing
+
+Found a new compatibility issue? Please open an [Issue](../../issues) with:
+- Browser and version (`chrome://version/`)
+- Operating system
+- Translation provider being used
+- Error messages from DevTools console (F12 → Console tab)
 
 ---
-
-### 💡 为什么使用本增强仓库？
-
-1.  **突破限制：** 官方版本目前已停止开源。我们通过特定补丁，帮助用户恢复自定义 API 节点的功能。
-2.  **网络加速：** 解决国内用户访问 DeepL / Google 翻译接口不稳定的问题。
-3.  **报错跟进：** 如果你在官方 [Issues](https://github.com) 提问没得到回复，可以在我们的实验室获取快速修复方案。
-
-### 🛠️ 安装与使用
-
-1.  访问 **[chenni-translate.com](https://chenni-translate.com)** 获取最新的补丁代码。
-2.  按照页面提示，将代码复制到插件的“开发者设置”中。
-3.  重启浏览器，即可享受满速双语翻译。
-
----
-
-#### 📺 功能演示视频
-Below is a video introduction:
-
-https://github.com/immersive-translate/immersive-translate/assets/62473795/a0e9af51-4a18-45ef-9fc4-0a1509d56ab0
----
-
-> **免责声明：** 本仓库仅作为沉浸式翻译爱好者的交流与技术支持，所有增强补丁由 [Chenni Translate](https://chenni-translate.com) 实验室提供。
-
-Search "qishui-app.org fix" on Google to get more support.
+*Full technical documentation, diagnostic tools, and FAQ at [chenni-translate.com](https://chenni-translate.com)*
